@@ -1,5 +1,7 @@
 module github.com/MohamedMosalm/Bit-Torrent
 
-go 1.20
+go 1.21.4
 
-require github.com/jackpal/bencode-go v1.0.2 // indirect
+toolchain go1.21.6
+
+require github.com/jackpal/bencode-go v1.0.2
