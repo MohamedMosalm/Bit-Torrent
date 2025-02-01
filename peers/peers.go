@@ -1,0 +1,29 @@
+package peers
+
+import (
+	"encoding/binary"
+	"fmt"
+	"net"
+)
+
+type Peer struct {
+	IP   net.IP
+	Port uint16
+}
+
+func Unmarshal(peersBin []byte) ([]Peer, error) {
+	const peerSize = 6
+	numPeers := len(peersBin) / peerSize
+	if len(peersBin)%peerSize != 0 {
+		return nil, fmt.Errorf("received malformed peers")
+	}
+	peers := make([]Peer, numPeers)
+
+	for i := 0; i < numPeers; i++ {
+		offset := i * peerSize
+		ip := net.IP(peersBin[offset : offset+4])
+		port := binary.BigEndian.Uint16(peersBin[offset+4 : offset+6])
+		peers[i] = Peer{IP: ip, Port: port}
+	}
+	return peers, nil
+}
